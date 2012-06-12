@@ -13,8 +13,11 @@ public:
 	virtual void update(double time) = 0;
 };
 
-class Controllable : Drawable, Updateable
+class Controllable : Updateable, Drawable
 {
+public:
+	virtual void update(double time) = 0;
+	virtual void draw() = 0;
 };
 
 class Typeable

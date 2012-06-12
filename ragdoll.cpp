@@ -1,6 +1,18 @@
 #include "ragdoll.h"
+#include "sys/physics.h"
 
-Ragdoll::Ragdoll(Environment &env) : env(env)
+Ragdoll::Ragdoll()
+{
+	
+}
+
+void Ragdoll::close()
+{
+	
+}
+
+
+void Ragdoll::draw()
 {
 	
 }

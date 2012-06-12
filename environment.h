@@ -3,7 +3,7 @@
 
 #include "interfaces.h"
 
-class Environment : Drawable
+class Environment : public Drawable
 {
 private:
 	int world;

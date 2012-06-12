@@ -1,15 +1,17 @@
 #ifndef RAGDOLL_H
 #define RAGDOLL_H
 
-#include "environment.h"
+#include "interfaces.h"
 
-class Ragdoll
+class Ragdoll : public Drawable
 {
 private:
-	Environment &env;
 
 public:
-	Ragdoll(Environment &env);
+	Ragdoll();
+	void close();
+
+	void draw();
 };
 
 #endif

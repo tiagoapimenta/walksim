@@ -1,16 +1,15 @@
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
-#include "ragdoll.h"
+#include "interfaces.h"
 
-class Simulator : Updateable
+class Simulator : public Updateable
 {
 private:
-	Environment &env;
-	Ragdoll &doll;
 
 public:
-	Simulator(Environment &env, Ragdoll &doll);
+	Simulator();
+	void close();
 
 	void update(double time);
 };

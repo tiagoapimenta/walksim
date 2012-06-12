@@ -1,16 +1,19 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "ragdoll.h"
+#include "interfaces.h"
 
-class Controller
+class Controller : public Updateable, public Drawable, public Typeable
 {
 private:
-	Environment &env;
-	Ragdoll &doll;
 
 public:
-	Controller(Environment &env, Ragdoll &doll);
+	Controller();
+	void close();
+
+	void update(double time);
+	void draw();
+	void type(int key);
 };
 
 #endif
