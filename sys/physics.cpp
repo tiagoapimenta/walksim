@@ -1,4 +1,4 @@
-#include <vector>
+#include <map>
 
 #include <ode/ode.h>
 
@@ -9,27 +9,43 @@ typedef struct
 	dWorldID world;
 	dSpaceID space;
 	dJointGroupID contact_group;
-} physics_world;
+} World;
+
+std::map<int, World> worlds;
+int world_last_id = 0;
 
 
 void physics_init()
 {
-	//dInitODE();
+	dInitODE();
 }
 
 void physics_close()
 {
-	//dCloseODE();
+	dCloseODE();
 }
 
 
 int physics_create_world(double gravity)
 {
-	return 0;
+	World world;
+	world.world = dWorldCreate();
+	world.space = dSimpleSpaceCreate(0);
+	world.contact_group = dJointGroupCreate(0);
+	dWorldSetGravity(world.world, 0.0, gravity, 0.0);
+
+	worlds.insert(std::make_pair(world_last_id, world));
+	return world_last_id++;
 }
 
-void physics_destroy_world(int world)
+void physics_destroy_world(int world_id)
 {
+	World world = worlds.at(world_id);
+	dJointGroupDestroy(world.contact_group);
+	dSpaceDestroy(world.space);
+	dWorldDestroy(world.world);
+
+	worlds.erase(world_id);
 }
 
 

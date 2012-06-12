@@ -1,8 +1,6 @@
 #include "environment.h"
 #include "sys/physics.h"
 
-#include <iostream>
-
 Environment::Environment(double gravity)
 {
 	physics_init();
