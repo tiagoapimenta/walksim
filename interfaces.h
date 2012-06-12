@@ -10,7 +10,7 @@ public:
 class Updateable
 {
 public:
-	void update();
+	void update(double time);
 };
 
 class Typeable

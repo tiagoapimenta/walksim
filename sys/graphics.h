@@ -7,7 +7,7 @@ void graphics_close();
 int graphics_create_window(const char *title, int left, int top, int width, int height);
 void graphics_destroy_window(int window);
 
-void graphics_set_updater(double update_interval, void(*updater)());
+void graphics_set_updater(double update_interval, void(*updater)(double));
 void graphics_set_typer(void(*typer)(int key));
 
 void graphics_main_loop();

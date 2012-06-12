@@ -10,7 +10,6 @@ private:
 	Environment &env;
 	Ragdoll &doll;
 	Simulator &sim;
-	int window;
 
 public:
 	Renderer(int argc, char **argv, int width, int height, Environment &env, Ragdoll &doll, Simulator &sim);

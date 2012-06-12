@@ -3,7 +3,7 @@
 
 #include "ragdoll.h"
 
-class Simulator
+class Simulator : Updateable
 {
 private:
 	Environment &env;
@@ -11,6 +11,8 @@ private:
 
 public:
 	Simulator(Environment &env, Ragdoll &doll);
+
+	void update(double time);
 };
 
 #endif
