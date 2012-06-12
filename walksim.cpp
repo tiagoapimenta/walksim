@@ -16,6 +16,8 @@ int main(int argc, char *argv[])
 
 	render.init(argc, argv, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	env.destroy();
+
 	std::cout << "End." << std::endl;
 	return 0;
 }

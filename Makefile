@@ -5,7 +5,7 @@
 TARGET  = walksim
 
 SOURCES = walksim.cpp environment.cpp ragdoll.cpp controller.cpp renderer.cpp \
-          simulator.cpp
+          simulator.cpp sys/physics.cpp
 
 OBJS    = $(SOURCES:.cpp=.o)
 
