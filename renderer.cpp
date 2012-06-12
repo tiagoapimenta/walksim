@@ -1,7 +1,10 @@
 #include "renderer.h"
 #include "sys/graphics.h"
 
-static void update_callback(double time);
+std::list<Updateable*> Renderer::updaters;
+std::list<Drawable*> Renderer::drawers;
+
+//void update_callback(double time);
 
 Renderer::Renderer(int argc, char **argv, int width, int height, Environment &env, Ragdoll &doll, Simulator &sim) : env(env), doll(doll), sim(sim)
 {
@@ -11,6 +14,8 @@ Renderer::Renderer(int argc, char **argv, int width, int height, Environment &en
 
 void Renderer::close()
 {
+	updaters.clear();
+	drawers.clear();
 	graphics_close();
 }
 
@@ -22,9 +27,36 @@ void Renderer::init(double time)
 	graphics_main_loop();
 }
 
-static void update_callback(double time)
+void Renderer::addUpdater(Updateable &updater)
 {
-	// call update
-	// call draw
+	updaters.push_back(&updater);
+	updaters.unique();
+}
+
+void Renderer::addDrawer(Drawable &drawer)
+{
+	drawers.push_back(&drawer);
+	drawers.unique();
+}
+
+void Renderer::addController(Controllable &controller)
+{
+	updaters.push_back((Updateable*)&controller);
+	drawers.push_back((Drawable*)&controller);
+	updaters.unique();
+	drawers.unique();
+}
+
+
+void Renderer::update_callback(double time)
+{
+	for (std::list<Updateable*>::iterator it = updaters.begin(); it != updaters.end(); it++)
+	{
+		(*it)->update(time);
+	}
+	for (std::list<Drawable*>::iterator it = drawers.begin(); it != drawers.end(); it++)
+	{
+		(*it)->draw();
+	}
 }
 

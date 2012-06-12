@@ -4,19 +4,23 @@
 class Drawable
 {
 public:
-	void draw();
+	virtual void draw() = 0;
 };
 
 class Updateable
 {
 public:
-	void update(double time);
+	virtual void update(double time) = 0;
+};
+
+class Controllable : Drawable, Updateable
+{
 };
 
 class Typeable
 {
 public:
-	void type(int key);
+	virtual void type(int key) = 0;
 };
 
 #endif
