@@ -11,8 +11,8 @@ typedef struct
 	dJointGroupID contact_group;
 } World;
 
-std::map<int, World> worlds;
-int world_last_id = 0;
+static std::map<int, World> worlds;
+static int world_last_id = 0;
 
 
 void physics_init()
@@ -41,6 +41,7 @@ int physics_create_world(double gravity)
 void physics_destroy_world(int world_id)
 {
 	World world = worlds.at(world_id);
+
 	dJointGroupDestroy(world.contact_group);
 	dSpaceDestroy(world.space);
 	dWorldDestroy(world.world);

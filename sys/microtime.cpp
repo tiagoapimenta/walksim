@@ -1,7 +1,8 @@
 #include "microtime.h"
 #include <sys/timeb.h>
+#include <unistd.h>
 
-time_t last_time = 0;
+static time_t last_time = 0;
 
 mtime microtime()
 {
@@ -12,3 +13,9 @@ mtime microtime()
 
 	return ((mtime)(tp.time - last_time)) * 1000 + (mtime)tp.millitm;
 }
+
+void microsleep(mtime time)
+{
+	usleep(time * 1000);
+}
+

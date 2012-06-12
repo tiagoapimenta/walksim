@@ -5,5 +5,7 @@ typedef unsigned long long mtime;
 
 mtime microtime();
 
+void microsleep(mtime time);
+
 #endif
 
