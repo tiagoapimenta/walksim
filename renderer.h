@@ -7,12 +7,12 @@
 class Renderer
 {
 private:
-	Environment env;
-	Ragdoll doll;
-	Simulator sim;
+	Environment &env;
+	Ragdoll &doll;
+	Simulator &sim;
 
 public:
-	Renderer(Environment env, Ragdoll doll, Simulator sim);
+	Renderer(Environment &env, Ragdoll &doll, Simulator &sim);
 
 	void init(int argc, char **argv, int width, int height);
 };

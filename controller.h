@@ -6,11 +6,11 @@
 class Controller
 {
 private:
-	Environment env;
-	Ragdoll doll;
+	Environment &env;
+	Ragdoll &doll;
 
 public:
-	Controller(Environment env, Ragdoll doll);
+	Controller(Environment &env, Ragdoll &doll);
 };
 
 #endif

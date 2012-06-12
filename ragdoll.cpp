@@ -1,6 +1,6 @@
 #include "ragdoll.h"
 
-Ragdoll::Ragdoll(Environment env) : env(env)
+Ragdoll::Ragdoll(Environment &env) : env(env)
 {
 	
 }

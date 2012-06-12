@@ -51,11 +51,18 @@ void physics_destroy_world(int world_id)
 
 int physics_create_fixed_plane(double pos_x, double pos_y, double pos_z, double width, double height)
 {
+	// TODO: create plane
 	return 0;
 }
 
 
 void physics_update(double time)
 {
+	for (std::map<int, World>::iterator it = worlds.begin(); it != worlds.end(); it++)
+	{
+		dJointGroupEmpty(it->second.contact_group);
+		//dSpaceCollide(it->second.space, 0, nearCallback);
+		dWorldQuickStep(it->second.world, time);
+	}
 }
 

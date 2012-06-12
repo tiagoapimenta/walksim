@@ -6,10 +6,10 @@
 class Ragdoll
 {
 private:
-	Environment env;
+	Environment &env;
 
 public:
-	Ragdoll(Environment env);
+	Ragdoll(Environment &env);
 };
 
 #endif

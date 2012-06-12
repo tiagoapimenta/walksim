@@ -5,7 +5,7 @@
 TARGET  = walksim
 
 SOURCES = walksim.cpp environment.cpp ragdoll.cpp controller.cpp renderer.cpp \
-          simulator.cpp sys/physics.cpp
+          simulator.cpp sys/physics.cpp sys/graphics.cpp sys/microtime.cpp
 
 OBJS    = $(SOURCES:.cpp=.o)
 
@@ -23,4 +23,4 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CFLAGS) -c $< -o $@
 
 clean:
-	@rm $(TARGET) *.o
+	@rm $(TARGET) $(OBJS)

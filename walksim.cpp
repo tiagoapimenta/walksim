@@ -14,9 +14,12 @@ int main(int argc, char *argv[])
 	Simulator   sim(env, doll);
 	Renderer    render(env, doll, sim);
 
-	render.init(argc, argv, SCREEN_WIDTH, SCREEN_HEIGHT);
+	/*render.addController(control);
+	render.addUpdater(sim);
+	render.addDrawer(env);
+	render.addDrawer(doll);*/
 
-	env.destroy();
+	render.init(argc, argv, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	std::cout << "End." << std::endl;
 	return 0;

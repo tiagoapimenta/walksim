@@ -10,10 +10,9 @@ private:
 
 public:
 	Environment(double gravity);
+	~Environment();
 
 	void draw();
-
-	void destroy();
 };
 
 #endif

@@ -8,12 +8,11 @@ Environment::Environment(double gravity)
 	int plane = physics_create_fixed_plane(0.0, -10.0, 0.0, 20.0, 20.0);
 }
 
-void Environment::destroy()
+Environment::~Environment()
 {
 	physics_destroy_world(world);
 	physics_close();
 }
-
 
 void Environment::draw()
 {

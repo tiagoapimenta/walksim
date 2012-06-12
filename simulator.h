@@ -6,11 +6,11 @@
 class Simulator
 {
 private:
-	Environment env;
-	Ragdoll doll;
+	Environment &env;
+	Ragdoll &doll;
 
 public:
-	Simulator(Environment env, Ragdoll doll);
+	Simulator(Environment &env, Ragdoll &doll);
 };
 
 #endif
