@@ -10,7 +10,7 @@ private:
 
 public:
 	Environment(double gravity);
-	~Environment();
+	void close();
 
 	void draw();
 };

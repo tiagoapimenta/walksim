@@ -12,14 +12,20 @@ int main(int argc, char *argv[])
 	Ragdoll     doll(env);
 	Controller  control(env, doll);
 	Simulator   sim(env, doll);
-	Renderer    render(env, doll, sim);
+	Renderer    render(argc, argv, SCREEN_WIDTH, SCREEN_HEIGHT, env, doll, sim);
 
-	/*render.addController(control);
-	render.addUpdater(sim);
-	render.addDrawer(env);
-	render.addDrawer(doll);*/
+	//render.addController(control);
+	//render.addUpdater(sim);
+	//render.addDrawer(env);
+	//render.addDrawer(doll);
 
-	render.init(argc, argv, SCREEN_WIDTH, SCREEN_HEIGHT);
+	render.init(TIME_PER_FRAME);
+
+	env.close();
+	//doll.close();
+	//control.close();
+	//sim.close();
+	render.close();
 
 	std::cout << "End." << std::endl;
 	return 0;

@@ -10,11 +10,13 @@ private:
 	Environment &env;
 	Ragdoll &doll;
 	Simulator &sim;
+	int window;
 
 public:
-	Renderer(Environment &env, Ragdoll &doll, Simulator &sim);
+	Renderer(int argc, char **argv, int width, int height, Environment &env, Ragdoll &doll, Simulator &sim);
+	void close();
 
-	void init(int argc, char **argv, int width, int height);
+	void init(double time);
 };
 
 #endif
