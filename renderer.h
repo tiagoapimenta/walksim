@@ -8,6 +8,7 @@
 class Renderer
 {
 private:
+	int window;
 	static std::list<Updateable*> updaters;
 	static std::list<Drawable*> drawers;
 	static std::list<Typeable*> typers;
@@ -17,6 +18,7 @@ private:
 
 public:
 	Renderer(int argc, char **argv, int width, int height);
+	void closeWindow();
 	void close();
 
 	void init(double time);

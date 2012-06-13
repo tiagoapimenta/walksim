@@ -7,6 +7,7 @@ class Environment : public Drawable
 {
 private:
 	int world;
+	int plane;
 
 public:
 	Environment(double gravity);

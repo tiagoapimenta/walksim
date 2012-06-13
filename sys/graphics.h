@@ -1,6 +1,8 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include "types.h"
+
 void graphics_init(int argc, char **argv);
 void graphics_close();
 
@@ -14,6 +16,7 @@ void graphics_main_loop();
 
 void graphics_color(unsigned char red, unsigned char green, unsigned char blue);
 
+void graphics_draw_triangles(Vertex *vertices, int triangles);
 //void graphics_draw_sphere(...);
 //void graphics_draw_box(...);
 //void graphics_draw_plane(...);

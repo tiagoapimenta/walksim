@@ -80,6 +80,19 @@ void graphics_color(unsigned char red, unsigned char green, unsigned char blue)
 }
 
 
+void graphics_draw_triangles(Vertex *vertices, int triangles)
+{
+	glPushMatrix();
+	glBegin(GL_TRIANGLES);
+	for (int i = 0; i < triangles * 3; i++)
+	{
+		glVertex3d(vertices[i].x, vertices[i].y, vertices[i].z);
+	}
+	glEnd();
+	glPopMatrix();
+}
+
+
 static void on_close()
 {
 	glutLeaveMainLoop();

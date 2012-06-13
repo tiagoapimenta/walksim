@@ -8,7 +8,12 @@ std::list<Typeable*> Renderer::typers;
 Renderer::Renderer(int argc, char **argv, int width, int height)
 {
 	graphics_init(argc, argv);
-	graphics_create_window("Walking Simulator", 100, 100, width, height);
+	window = graphics_create_window("Walking Simulator", 100, 100, width, height);
+}
+
+void Renderer::closeWindow()
+{
+	graphics_destroy_window(window);
 }
 
 void Renderer::close()
