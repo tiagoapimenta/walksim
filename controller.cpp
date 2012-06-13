@@ -15,8 +15,8 @@ void Controller::close()
 
 void Controller::update(double time)
 {
-	graphics_translate(posX, posY, posZ);
 	graphics_rotate(angleX, angleY, 0.0);
+	graphics_translate(posX, posY, posZ);
 }
 
 void Controller::draw()
@@ -27,7 +27,7 @@ void Controller::type(int key)
 {
 	switch (key)
 	{
-		case 27:
+		case KEY_ESCAPE:
 		{
 			render.closeWindow();
 			break;
@@ -52,6 +52,40 @@ void Controller::type(int key)
 			posX -= MOVE_STEP;
 			break;
 		}
+		case 'z':
+		{
+			posY -= MOVE_STEP;
+			break;
+		}
+		case 'x':
+		{
+			posY += MOVE_STEP;
+			break;
+		}
+		case KEY_UP:
+		{
+			angleX -= VIEW_STEP;
+			break;
+		}
+		case KEY_DOWN:
+		{
+			angleX += VIEW_STEP;
+			break;
+		}
+		case KEY_LEFT:
+		{
+			angleY -= VIEW_STEP;
+			break;
+		}
+		case KEY_RIGHT:
+		{
+			angleY += VIEW_STEP;
+			break;
+		}
 	}
+}
+
+void Controller::typeRelease(int key)
+{
 }
 

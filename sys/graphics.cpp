@@ -12,10 +12,15 @@ static mtime last_time = 0;
 static double update_time = 0.0;
 static void(*update_func)(double time) = NULL;
 static void(*type_func)(int key) = NULL;
+static void(*type_release_func)(int key) = NULL;
+static bool key_state[3] = {false, false, false};
 
 static void on_close();
 static void on_resize(int width, int height);
-static void on_keypress(unsigned char key, int x, int y);
+static void on_keydown(unsigned char key, int x, int y);
+static void on_keyup(unsigned char key, int x, int y);
+static void on_specialdown(int key, int x, int y);
+static void on_specialup(int key, int x, int y);
 static void on_update();
 
 
@@ -40,10 +45,14 @@ int graphics_create_window(const char *title, int left, int top, int width, int 
 	int window_id = glutCreateWindow(title);
 
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+	// Hint: use glutSetKeyRepeat(0) to key statefull
 
 	glutCloseFunc(on_close);
 	glutReshapeFunc(on_resize);
-	glutKeyboardFunc(on_keypress);
+	glutKeyboardFunc(on_keydown);
+	glutKeyboardUpFunc(on_keyup);
+	glutSpecialFunc(on_specialdown);
+	glutSpecialUpFunc(on_specialup);
 	glutIdleFunc(on_update);
 
 	return window_id;
@@ -64,6 +73,11 @@ void graphics_set_updater(double update_interval, void(*updater)(double time))
 void graphics_set_typer(void(*typer)(int key))
 {
 	type_func = typer;
+}
+
+void graphics_set_typer_release(void(*typer)(int key))
+{
+	type_release_func = typer;
 }
 
 
@@ -111,6 +125,144 @@ void graphics_scale(double x, double y, double z)
 
 
 
+static int translate_key(unsigned char key)
+{
+	int translated_key = 0;
+	switch (key)
+	{
+		case GLUT_KEY_F1:
+		{
+			translated_key = KEY_F1;
+			break;
+		}
+		case GLUT_KEY_F2:
+		{
+			translated_key = KEY_F2;
+			break;
+		}
+		case GLUT_KEY_F3:
+		{
+			translated_key = KEY_F3;
+			break;
+		}
+		case GLUT_KEY_F4:
+		{
+			translated_key = KEY_F4;
+			break;
+		}
+		case GLUT_KEY_F5:
+		{
+			translated_key = KEY_F5;
+			break;
+		}
+		case GLUT_KEY_F6:
+		{
+			translated_key = KEY_F6;
+			break;
+		}
+		case GLUT_KEY_F7:
+		{
+			translated_key = KEY_F7;
+			break;
+		}
+		case GLUT_KEY_F8:
+		{
+			translated_key = KEY_F8;
+			break;
+		}
+		case GLUT_KEY_F9:
+		{
+			translated_key = KEY_F9;
+			break;
+		}
+		case GLUT_KEY_F10:
+		{
+			translated_key = KEY_F10;
+			break;
+		}
+		case GLUT_KEY_F11:
+		{
+			translated_key = KEY_F11;
+			break;
+		}
+		case GLUT_KEY_F12:
+		{
+			translated_key = KEY_F12;
+			break;
+		}
+		case GLUT_KEY_LEFT:
+		{
+			translated_key = KEY_LEFT;
+			break;
+		}
+		case GLUT_KEY_UP:
+		{
+			translated_key = KEY_UP;
+			break;
+		}
+		case GLUT_KEY_RIGHT:
+		{
+			translated_key = KEY_RIGHT;
+			break;
+		}
+		case GLUT_KEY_DOWN:
+		{
+			translated_key = KEY_DOWN;
+			break;
+		}
+		case GLUT_KEY_PAGE_UP:
+		{
+			translated_key = KEY_PAGE_UP;
+			break;
+		}
+		case GLUT_KEY_PAGE_DOWN:
+		{
+			translated_key = KEY_PAGE_DOWN;
+			break;
+		}
+		case GLUT_KEY_HOME:
+		{
+			translated_key = KEY_HOME;
+			break;
+		}
+		case GLUT_KEY_END:
+		{
+			translated_key = KEY_END;
+			break;
+		}
+		case GLUT_KEY_INSERT:
+		{
+			translated_key = KEY_INSERT;
+			break;
+		}
+	}
+	return translated_key;
+}
+
+static int translate_mode()
+{
+	int mode = glutGetModifiers();
+
+	bool new_key_state[3];
+
+	new_key_state[0] = (mode & GLUT_ACTIVE_SHIFT) == GLUT_ACTIVE_SHIFT;
+	new_key_state[1] = (mode & GLUT_ACTIVE_CTRL)  == GLUT_ACTIVE_CTRL;
+	new_key_state[2] = (mode & GLUT_ACTIVE_ALT)   == GLUT_ACTIVE_ALT;
+
+	if (new_key_state[0] && ! key_state[0] && type_func) type_func(KEY_SHIFT);
+	if (!new_key_state[0] && key_state[0] && type_release_func) type_release_func(KEY_SHIFT);
+
+	if (new_key_state[1] && ! key_state[1] && type_func) type_func(KEY_CONTROL);
+	if (!new_key_state[1] && key_state[1] && type_release_func) type_release_func(KEY_CONTROL);
+
+	if (new_key_state[2] && ! key_state[2] && type_func) type_func(KEY_ALT);
+	if (!new_key_state[2] && key_state[2] && type_release_func) type_release_func(KEY_ALT);
+
+	key_state[0] = new_key_state[0];
+	key_state[1] = new_key_state[1];
+	key_state[2] = new_key_state[2];
+}
+
 static void on_close()
 {
 	glutLeaveMainLoop();
@@ -125,9 +277,28 @@ static void on_resize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-static void on_keypress(unsigned char key, int x, int y)
+static void on_keydown(unsigned char key, int x, int y)
 {
+	translate_mode();
 	if (type_func) type_func(key);
+}
+
+static void on_keyup(unsigned char key, int x, int y)
+{
+	translate_mode();
+	if (type_release_func) type_release_func(key);
+}
+
+static void on_specialdown(int key, int x, int y)
+{
+	translate_mode();
+	if (type_func) type_func(translate_key(key));
+}
+
+static void on_specialup(int key, int x, int y)
+{
+	translate_mode();
+	if (type_release_func) type_release_func(translate_key(key));
 }
 
 static void on_update()

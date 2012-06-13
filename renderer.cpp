@@ -28,6 +28,7 @@ void Renderer::init(double time)
 {
 	graphics_set_updater(time, &update_callback);
 	graphics_set_typer(&type_callback);
+	graphics_set_typer_release(&type_release_callback);
 
 	graphics_main_loop();
 }
@@ -61,6 +62,14 @@ void Renderer::update_callback(double time)
 }
 
 void Renderer::type_callback(int key)
+{
+	for (std::list<Typeable*>::iterator it = typers.begin(); it != typers.end(); it++)
+	{
+		(*it)->type(key);
+	}
+}
+
+void Renderer::type_release_callback(int key)
 {
 	for (std::list<Typeable*>::iterator it = typers.begin(); it != typers.end(); it++)
 	{

@@ -15,6 +15,7 @@ private:
 
 	static void update_callback(double time);
 	static void type_callback(int key);
+	static void type_release_callback(int key);
 
 public:
 	Renderer(int argc, char **argv, int width, int height);

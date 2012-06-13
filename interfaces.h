@@ -24,6 +24,7 @@ class Typeable
 {
 public:
 	virtual void type(int key) = 0;
+	virtual void typeRelease(int key) = 0;
 };
 
 #endif

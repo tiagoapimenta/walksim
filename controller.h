@@ -17,6 +17,7 @@ public:
 	void update(double time);
 	void draw();
 	void type(int key);
+	void typeRelease(int key);
 };
 
 #endif
