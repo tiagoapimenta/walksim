@@ -27,6 +27,6 @@ void Environment::draw()
 	{
 		std::cout << "(" << vertices[i].x << "x" << vertices[i].y << "x" << vertices[i].z << ")" << std::endl;
 	}
-	//graphics_draw_triangles(vertices, triangles);
+	graphics_draw_triangles(vertices, triangles);
 }
 

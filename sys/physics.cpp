@@ -20,7 +20,14 @@ typedef struct
 	dBodyID body;
 	dMass   mass;
 	dGeomID geom;
+	void*   data;
 } Object3D;
+
+typedef struct
+{
+	dTriIndex indexes[6];
+	dVector3  vertices[4];
+} PlaneTriMesh;
 
 static std::map<int, World> worlds;
 static int world_last_id = 0;
@@ -70,24 +77,56 @@ int physics_create_fixed_plane(int world_id, double pos_x, double pos_y, double 
 {
 	World world = worlds.at(world_id);
 	Object3D object;
+	//PlaneTriMesh plane_mesh = {
+	object.data = new PlaneTriMesh({
+		{2, 1, 0, 3, 2, 0}, // indexes
+		{
+			{ (width / 2), 0.0,  (height / 2)},
+			{-(width / 2), 0.0,  (height / 2)},
+			{-(width / 2), 0.0, -(height / 2)},
+			{ (width / 2), 0.0, -(height / 2)}
+		} // vertices
+	});
 
-	dTriIndex indexes[6] = {2, 1, 0, 3, 2, 0};
-	dVector3 triVert[4] = {
+	/*dTriIndex indexes[6] = {2, 1, 0, 3, 2, 0};
+	dVector3 vertices[4] = {
 		{ (width / 2), 0.0,  (height / 2)},
 		{-(width / 2), 0.0,  (height / 2)},
 		{-(width / 2), 0.0, -(height / 2)},
 		{ (width / 2), 0.0, -(height / 2)}
 	};
-	dTriMeshDataID triMesh = dGeomTriMeshDataCreate();
-	dGeomTriMeshDataBuildSimple(triMesh, (dReal*)triVert, 4, indexes, 6);
-	object.geom = dCreateTriMesh(world.space, triMesh, NULL, NULL, NULL);
+	plane_mesh.indexes = indexes;
+	plane_mesh.vertices = vertices;*/
+	//object.data = &plane_mesh;
+	PlaneTriMesh &plane_mesh = *(PlaneTriMesh*)object.data;
+
+	dTriMeshDataID tri_mesh = dGeomTriMeshDataCreate();
+	dGeomTriMeshDataBuildSimple(tri_mesh, (dReal*)plane_mesh.vertices, 4, plane_mesh.indexes, 6);
+	object.geom = dCreateTriMesh(world.space, tri_mesh, NULL, NULL, NULL);
 
 	dGeomSetData(object.geom, (void*)"Plane");
 	dGeomSetPosition(object.geom, 0, -10.0, 0);
 
+	dMassSetZero(&object.mass);
 	object.body = NULL;
 	
 	objects.insert(std::make_pair(object_last_id, object));
+
+	std::cout << "object " << object_last_id << " => " << std::hex << object.geom << std::endl;
+
+
+	dVector3 v1, v2, v3;
+	std::cout << "xxxxx" << std::endl;
+	dGeomTriMeshGetTriangle(object.geom, 0, &v1, &v2, &v3);
+	std::cout << "(" << v1[0] << "x" << v1[1] << "x" << v1[2] << ")" << std::endl;
+	std::cout << "(" << v2[0] << "x" << v2[1] << "x" << v2[2] << ")" << std::endl;
+	std::cout << "(" << v3[0] << "x" << v3[1] << "x" << v3[2] << ")" << std::endl;
+	dGeomTriMeshGetTriangle(object.geom, 1, &v1, &v2, &v3);
+	std::cout << "(" << v1[0] << "x" << v1[1] << "x" << v1[2] << ")" << std::endl;
+	std::cout << "(" << v2[0] << "x" << v2[1] << "x" << v2[2] << ")" << std::endl;
+	std::cout << "(" << v3[0] << "x" << v3[1] << "x" << v3[2] << ")" << std::endl;
+
+
 	return object_last_id++;
 }
 
@@ -134,6 +173,22 @@ int physics_get_triangles(int object_id, Vertex *vertices, int triangles)
 	if (!vertices) return count;
 
 	if (count > triangles) count = triangles;
+
+	std::cout << "object " << object_id << " => " << std::hex << object.geom << std::endl;
+
+	dGeomGetPosition(object.geom);
+
+	dVector3 v1, v2, v3;
+	std::cout << "=====" << std::endl;
+	dGeomTriMeshGetTriangle(object.geom, 0, &v1, &v2, &v3);
+	std::cout << "(" << v1[0] << "x" << v1[1] << "x" << v1[2] << ")" << std::endl;
+	std::cout << "(" << v2[0] << "x" << v2[1] << "x" << v2[2] << ")" << std::endl;
+	std::cout << "(" << v3[0] << "x" << v3[1] << "x" << v3[2] << ")" << std::endl;
+	dGeomTriMeshGetTriangle(object.geom, 1, &v1, &v2, &v3);
+	std::cout << "(" << v1[0] << "x" << v1[1] << "x" << v1[2] << ")" << std::endl;
+	std::cout << "(" << v2[0] << "x" << v2[1] << "x" << v2[2] << ")" << std::endl;
+	std::cout << "(" << v3[0] << "x" << v3[1] << "x" << v3[2] << ")" << std::endl;
+
 
 	for (int i = 0; i < count; i++)
 	{
