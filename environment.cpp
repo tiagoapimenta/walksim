@@ -17,16 +17,11 @@ void Environment::close()
 
 void Environment::draw()
 {
-	graphics_color(255, 255, 255);
+	graphics_color(0, 192, 0);
 	//Vertex position = physics_get_position(plane);
 	//graphics_translate(position.x, position.y, position.z);
 	Vertex vertices[6];
-	std::cout << "----------" << std::endl;
 	int triangles = physics_get_triangles(plane, vertices, 2);
-	for (int i = 0; i < triangles * 3; i++)
-	{
-		std::cout << "(" << vertices[i].x << "x" << vertices[i].y << "x" << vertices[i].z << ")" << std::endl;
-	}
 	graphics_draw_triangles(vertices, triangles);
 }
 

@@ -92,6 +92,24 @@ void graphics_draw_triangles(Vertex *vertices, int triangles)
 	glPopMatrix();
 }
 
+void graphics_translate(double x, double y, double z)
+{
+	glTranslated(x, y, z);
+}
+
+void graphics_rotate(double x, double y, double z)
+{
+	if (x) glRotated(x, 1.0, 0.0, 0.0);
+	if (y) glRotated(y, 0.0, 1.0, 0.0);
+	if (z) glRotated(z, 0.0, 0.0, 1.0);
+}
+
+void graphics_scale(double x, double y, double z)
+{
+	glScaled(x, y, z);
+}
+
+
 
 static void on_close()
 {

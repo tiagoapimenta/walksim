@@ -8,6 +8,7 @@ class Controller : public Updateable, public Drawable, public Typeable
 {
 private:
 	Renderer &render;
+	double posX, posY, posZ, angleX, angleY;
 
 public:
 	Controller(Renderer &render);
