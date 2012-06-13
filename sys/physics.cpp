@@ -2,8 +2,6 @@
 
 #include <ode/ode.h>
 
-#include <iostream>
-
 #include "physics.h"
 
 #define MAX_CONTACTS 10
@@ -77,28 +75,17 @@ int physics_create_fixed_plane(int world_id, double pos_x, double pos_y, double 
 {
 	World world = worlds.at(world_id);
 	Object3D object;
-	//PlaneTriMesh plane_mesh = {
-	object.data = new PlaneTriMesh({
-		{2, 1, 0, 3, 2, 0}, // indexes
-		{
-			{ (width / 2), 0.0,  (height / 2)},
-			{-(width / 2), 0.0,  (height / 2)},
-			{-(width / 2), 0.0, -(height / 2)},
-			{ (width / 2), 0.0, -(height / 2)}
-		} // vertices
-	});
-
-	/*dTriIndex indexes[6] = {2, 1, 0, 3, 2, 0};
-	dVector3 vertices[4] = {
-		{ (width / 2), 0.0,  (height / 2)},
-		{-(width / 2), 0.0,  (height / 2)},
-		{-(width / 2), 0.0, -(height / 2)},
-		{ (width / 2), 0.0, -(height / 2)}
-	};
-	plane_mesh.indexes = indexes;
-	plane_mesh.vertices = vertices;*/
-	//object.data = &plane_mesh;
-	PlaneTriMesh &plane_mesh = *(PlaneTriMesh*)object.data;
+	PlaneTriMesh &plane_mesh = *(PlaneTriMesh*)malloc(sizeof(PlaneTriMesh));
+	plane_mesh.indexes[4] = plane_mesh.indexes[0] = 2;
+	plane_mesh.indexes[1] = 1;
+	plane_mesh.indexes[5] = plane_mesh.indexes[2] = 0;
+	plane_mesh.indexes[3] = 3;
+	plane_mesh.vertices[0][1] = plane_mesh.vertices[1][1] = plane_mesh.vertices[2][1] = plane_mesh.vertices[3][1] = 0.0;
+	plane_mesh.vertices[0][0] = plane_mesh.vertices[3][0] = width / 2;
+	plane_mesh.vertices[1][0] = plane_mesh.vertices[2][0] = -(width / 2);
+	plane_mesh.vertices[0][2] = plane_mesh.vertices[1][2] = height / 2;
+	plane_mesh.vertices[2][2] = plane_mesh.vertices[3][2] = -(height / 2);
+	object.data = &plane_mesh;
 
 	dTriMeshDataID tri_mesh = dGeomTriMeshDataCreate();
 	dGeomTriMeshDataBuildSimple(tri_mesh, (dReal*)plane_mesh.vertices, 4, plane_mesh.indexes, 6);
@@ -111,22 +98,6 @@ int physics_create_fixed_plane(int world_id, double pos_x, double pos_y, double 
 	object.body = NULL;
 	
 	objects.insert(std::make_pair(object_last_id, object));
-
-	std::cout << "object " << object_last_id << " => " << std::hex << object.geom << std::endl;
-
-
-	dVector3 v1, v2, v3;
-	std::cout << "xxxxx" << std::endl;
-	dGeomTriMeshGetTriangle(object.geom, 0, &v1, &v2, &v3);
-	std::cout << "(" << v1[0] << "x" << v1[1] << "x" << v1[2] << ")" << std::endl;
-	std::cout << "(" << v2[0] << "x" << v2[1] << "x" << v2[2] << ")" << std::endl;
-	std::cout << "(" << v3[0] << "x" << v3[1] << "x" << v3[2] << ")" << std::endl;
-	dGeomTriMeshGetTriangle(object.geom, 1, &v1, &v2, &v3);
-	std::cout << "(" << v1[0] << "x" << v1[1] << "x" << v1[2] << ")" << std::endl;
-	std::cout << "(" << v2[0] << "x" << v2[1] << "x" << v2[2] << ")" << std::endl;
-	std::cout << "(" << v3[0] << "x" << v3[1] << "x" << v3[2] << ")" << std::endl;
-
-
 	return object_last_id++;
 }
 
@@ -135,6 +106,7 @@ void physics_destroy_object(int object_id)
 	Object3D object = objects.at(object_id);
 	if (object.body) dBodyDestroy(object.body);
 	if (object.geom) dGeomDestroy(object.geom);
+	if (object.data) free(object.data);
 	objects.erase(object_id);
 }
 
@@ -174,34 +146,15 @@ int physics_get_triangles(int object_id, Vertex *vertices, int triangles)
 
 	if (count > triangles) count = triangles;
 
-	std::cout << "object " << object_id << " => " << std::hex << object.geom << std::endl;
-
-	dGeomGetPosition(object.geom);
-
-	dVector3 v1, v2, v3;
-	std::cout << "=====" << std::endl;
-	dGeomTriMeshGetTriangle(object.geom, 0, &v1, &v2, &v3);
-	std::cout << "(" << v1[0] << "x" << v1[1] << "x" << v1[2] << ")" << std::endl;
-	std::cout << "(" << v2[0] << "x" << v2[1] << "x" << v2[2] << ")" << std::endl;
-	std::cout << "(" << v3[0] << "x" << v3[1] << "x" << v3[2] << ")" << std::endl;
-	dGeomTriMeshGetTriangle(object.geom, 1, &v1, &v2, &v3);
-	std::cout << "(" << v1[0] << "x" << v1[1] << "x" << v1[2] << ")" << std::endl;
-	std::cout << "(" << v2[0] << "x" << v2[1] << "x" << v2[2] << ")" << std::endl;
-	std::cout << "(" << v3[0] << "x" << v3[1] << "x" << v3[2] << ")" << std::endl;
-
-
 	for (int i = 0; i < count; i++)
 	{
 		dVector3 vector[3];
-		std::cout << "(" << i << ")" << std::endl;
 		dGeomTriMeshGetTriangle(object.geom, i, &vector[0], &vector[1], &vector[2]);
-		std::cout << "(OK)" << std::endl;
 		for (int j = 0; j < 3; j++)
 		{
 			vertices[i * 3 + j].x = vector[j][0];
 			vertices[i * 3 + j].y = vector[j][1];
 			vertices[i * 3 + j].z = vector[j][2];
-			std::cout << "(" << vertices[i * 3 + j].x << "x" << vertices[i * 3 + j].y << "x" << vertices[i * 3 + j].z << ")" << std::endl;
 		}
 	}
 	return count;

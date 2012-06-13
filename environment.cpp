@@ -23,7 +23,7 @@ void Environment::draw()
 	Vertex vertices[6];
 	std::cout << "----------" << std::endl;
 	int triangles = physics_get_triangles(plane, vertices, 2);
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < triangles * 3; i++)
 	{
 		std::cout << "(" << vertices[i].x << "x" << vertices[i].y << "x" << vertices[i].z << ")" << std::endl;
 	}
