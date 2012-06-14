@@ -46,8 +46,8 @@ void graphics_main_loop();
 void graphics_color(unsigned char red, unsigned char green, unsigned char blue);
 
 void graphics_draw_triangles(Vertex *vertices, int triangles);
+void graphics_draw_box(Vertex position, Transform rotation, Vertex lengths);
 //void graphics_draw_sphere(...);
-//void graphics_draw_box(...);
 //void graphics_draw_plane(...);
 
 void graphics_translate(double x, double y, double z);

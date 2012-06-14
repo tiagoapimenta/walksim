@@ -14,6 +14,8 @@ public:
 	void close();
 
 	void draw();
+
+	int getWorld();
 };
 
 #endif

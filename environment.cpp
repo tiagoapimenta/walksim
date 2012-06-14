@@ -26,3 +26,8 @@ void Environment::draw()
 	graphics_draw_triangles(vertices, triangles);
 }
 
+int Environment::getWorld()
+{
+	return world;
+}
+

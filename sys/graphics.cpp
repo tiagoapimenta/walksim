@@ -106,6 +106,72 @@ void graphics_draw_triangles(Vertex *vertices, int triangles)
 	glPopMatrix();
 }
 
+void graphics_draw_box(Vertex position, Transform rotation, Vertex lengths)
+{
+	//glEnable(GL_LIGHTING);
+	//glShadeModel(GL_FLAT);
+	double matrix[4][4];
+	matrix[0][0] = rotation.matrix[0][0];
+	matrix[0][1] = rotation.matrix[1][0];
+	matrix[0][2] = rotation.matrix[2][0];
+	matrix[0][3] = 0.0;
+	matrix[1][0] = rotation.matrix[0][1];
+	matrix[1][1] = rotation.matrix[1][1];
+	matrix[1][2] = rotation.matrix[2][1];
+	matrix[1][3] = 0.0;
+	matrix[2][0] = rotation.matrix[0][2];
+	matrix[2][1] = rotation.matrix[1][2];
+	matrix[2][2] = rotation.matrix[2][2];
+	matrix[2][3] = 0.0;
+	matrix[3][0] = position.x;
+	matrix[3][1] = position.y;
+	matrix[3][2] = position.z;
+	matrix[3][3] = 1.0;
+
+	glPushMatrix();
+	glMultMatrixd((double*)matrix);
+
+	double half_x = lengths.x / 2;
+	double half_y = lengths.y / 2;
+	double half_z = lengths.z / 2;
+
+	glBegin(GL_TRIANGLE_STRIP); // Sides
+	glNormal3d(-1.0, 0.0, 0.0);
+	glVertex3d(-half_x, -half_y, -half_z);
+	glVertex3d(-half_x, -half_y,  half_z);
+	glVertex3d(-half_x,  half_y, -half_z);
+	glVertex3d(-half_x,  half_y,  half_z);
+	glNormal3d(0.0, 1.0, 0.0);
+	glVertex3d( half_x,  half_y, -half_z);
+	glVertex3d( half_x,  half_y,  half_z);
+	glNormal3d(1.0, 0.0, 0.0);
+	glVertex3d( half_x, -half_y, -half_z);
+	glVertex3d( half_x, -half_y,  half_z);
+	glNormal3d(0,-1,0);
+	glVertex3d(-half_x, -half_y, -half_z);
+	glVertex3d(-half_x, -half_y,  half_z);
+	glEnd();
+
+	glBegin(GL_TRIANGLE_FAN); // Top Face
+	glNormal3d(0.0, 0.0, 1.0);
+	glVertex3d(-half_x, -half_y,  half_z);
+	glVertex3d( half_x, -half_y,  half_z);
+	glVertex3d( half_x,  half_y,  half_z);
+	glVertex3d(-half_x,  half_y,  half_z);
+	glEnd();
+
+	glBegin(GL_TRIANGLE_FAN); // Bottom Face
+	glNormal3d(0.0, 0.0, -1.0);
+	glVertex3d(-half_x, -half_y, -half_z);
+	glVertex3d(-half_x,  half_y, -half_z);
+	glVertex3d( half_x,  half_y, -half_z);
+	glVertex3d( half_x, -half_y, -half_z);
+	glEnd();
+
+	glPopMatrix();
+}
+
+
 void graphics_translate(double x, double y, double z)
 {
 	glTranslated(x, y, z);

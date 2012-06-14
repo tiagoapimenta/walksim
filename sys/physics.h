@@ -18,6 +18,9 @@ void physics_destroy_object(int object);
 void physics_update(double time);
 
 Vertex physics_get_position(int object);
+Vertex physics_get_lengths(int object);
+Transform physics_get_rotation(int object);
+
 int physics_get_triangles(int object, Vertex *vertices, int triangles);
 
 #endif

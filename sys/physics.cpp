@@ -148,13 +148,47 @@ Vertex physics_get_position(int object_id)
 {
 	Object3D object = objects.at(object_id);
 
-	const dReal *realP = dGeomGetPosition(object.geom);
+	//const dReal *realP = dGeomGetPosition(object.geom);
+	const dReal *realP = dBodyGetPosition(object.body);
+
 	Vertex position;
 	position.x = realP[0];
 	position.y = realP[1];
 	position.z = realP[2];
 	return position;
 }
+
+Vertex physics_get_lengths(int object_id)
+{
+	Object3D object = objects.at(object_id);
+
+	dVector3 sides;
+	dGeomBoxGetLengths(object.geom, sides);
+
+	Vertex lengths;
+	lengths.x = sides[0];
+	lengths.y = sides[1];
+	lengths.z = sides[2];
+	return lengths;
+}
+
+Transform physics_get_rotation(int object_id)
+{
+	Object3D object = objects.at(object_id);
+
+	const dReal *realP = dBodyGetRotation(object.body);
+
+	Transform rotation = {};
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			rotation.matrix[i][j] = realP[i * 4 + j];
+		}
+	}
+	return rotation;
+}
+
 
 int physics_get_triangles(int object_id, Vertex *vertices, int triangles)
 {
