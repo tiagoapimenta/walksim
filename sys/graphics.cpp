@@ -171,6 +171,16 @@ void graphics_draw_box(Vertex position, Transform rotation, Vertex lengths)
 	glPopMatrix();
 }
 
+void graphics_draw_sphere(Vertex position, double radius)
+{
+	glPushMatrix();
+	glTranslated(position.x, position.y, position.z);
+	GLUquadric *quad = gluNewQuadric();
+	gluSphere(quad, radius, 8, 8);
+	gluDeleteQuadric(quad);
+	glPopMatrix();
+}
+
 
 void graphics_translate(double x, double y, double z)
 {
@@ -339,7 +349,7 @@ static void on_resize(int width, int height)
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20.0);
+	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 50.0);
 	glMatrixMode(GL_MODELVIEW);
 }
 

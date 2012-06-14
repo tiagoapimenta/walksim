@@ -2,12 +2,6 @@
 #include "sys/physics.h"
 #include "sys/graphics.h"
 
-#define DEFAULT_SIZE   10.0
-#define DEFAULT_WIDTH  (0.04 * DEFAULT_SIZE)
-#define DEFAULT_HEIGHT (0.2 * DEFAULT_SIZE)
-#define DEFAULT_LENGTH (1e-6 * DEFAULT_SIZE)
-#define DEFAULT_MASS   1.0
-
 #define TORSO_WIDTH    DEFAULT_WIDTH
 #define TORSO_HEIGHT   (0.480 * DEFAULT_SIZE)
 #define TORSO_LENGTH   DEFAULT_LENGTH
@@ -28,8 +22,10 @@
 #define FOOT_LENGTH    DEFAULT_LENGTH
 #define FOOT_MASS      DEFAULT_MASS
 
+#define JOINT_RADIUS   (0.05 * DEFAULT_SIZE)
+
 #define TORSO_X        0.0
-#define TORSO_Y        (0.5 * TORSO_HEIGHT + THIGH_LENGTH + SHIN_LENGTH + 0.5 * DEFAULT_WIDTH)
+#define TORSO_Y        (0.5 * TORSO_HEIGHT + THIGH_LENGTH + SHIN_LENGTH + 0.5 * DEFAULT_WIDTH - 4.0)
 #define TORSO_Z        0.0
 
 #define LEFT_THIGH_X   0.0
@@ -185,6 +181,10 @@ Ragdoll::Ragdoll(Environment &env) : env(env)
 
 void Ragdoll::close()
 {
+	for (int i = 0 ; i < JOINT_MAX; i++)
+	{
+		physics_destroy_joint(joints[i]);
+	}
 	for (int i = 0 ; i < OBJECT_MAX; i++)
 	{
 		physics_destroy_object(objects[i]);
@@ -200,8 +200,24 @@ void Ragdoll::draw()
 		Vertex position = physics_get_position(objects[i]);
 		Transform rotation = physics_get_rotation(objects[i]);
 
-		graphics_color(255, 255, 255);
+		if (i == 0) graphics_color(255, 255, 0);
+		else if (i % 2 == 0) graphics_color(78, 78, 156);
+		else graphics_color(78, 156, 78);
 		graphics_draw_box(position, rotation, lengths);
 	}
+
+	for (int i = 0; i < JOINT_MAX; i++)
+	{
+		Vertex position = physics_get_hinge_anchor(joints[i]);
+
+		graphics_color(255, 0, 255);
+		graphics_draw_sphere(position, JOINT_RADIUS);
+	}
+}
+
+
+int* Ragdoll::getJoints()
+{
+	return joints;
 }
 

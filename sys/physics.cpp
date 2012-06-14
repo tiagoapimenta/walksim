@@ -231,7 +231,7 @@ int physics_create_hinge_joint(int world_id, int object_id1, int object_id2, dou
 	Object3D object1 = objects.at(object_id1);
 	Object3D object2 = objects.at(object_id2);
 
-	dJointID joint = dJointCreateHinge(world.world, world.contact_group);
+	dJointID joint = dJointCreateHinge(world.world, NULL); //world.contact_group
 	dJointAttach(joint, object1.body, object2.body);
 	dJointSetHingeAnchor(joint, x, y, z);
 	dJointSetHingeAxis(joint, axisX, axisY, axisZ);
@@ -245,6 +245,38 @@ void physics_destroy_joint(int joint_id)
 	dJointID joint = joints.at(joint_id);
 	dJointDestroy(joint);
 	joints.erase(joint_id);
+}
+
+Vertex physics_get_hinge_anchor(int joint_id)
+{
+	dJointID joint = joints.at(joint_id);
+
+	dVector3 anchor;
+	dJointGetHingeAnchor(joint, anchor);
+
+	Vertex position;
+	position.x = anchor[0];
+	position.y = anchor[1];
+	position.z = anchor[2];
+	return position;
+}
+
+double physics_get_hinge_angle(int joint_id)
+{
+	dJointID joint = joints.at(joint_id);
+	return dJointGetHingeAngle(joint);
+}
+
+double physics_get_hinge_angle_rate(int joint_id)
+{
+	dJointID joint = joints.at(joint_id);
+	return dJointGetHingeAngleRate(joint);
+}
+
+void physics_add_hinge_torque(int joint_id, double torque)
+{
+	dJointID joint = joints.at(joint_id);
+	dJointAddHingeTorque(joint, torque);
 }
 
 

@@ -26,5 +26,10 @@ int physics_get_triangles(int object, Vertex *vertices, int triangles);
 int physics_create_hinge_joint(int world, int object1, int object2, double x, double y, double z, double axisX, double axisY, double axisZ);
 void physics_destroy_joint(int joint);
 
+Vertex physics_get_hinge_anchor(int joint);
+double physics_get_hinge_angle(int joint);
+double physics_get_hinge_angle_rate(int joint);
+void physics_add_hinge_torque(int joint, double torque);
+
 #endif
 

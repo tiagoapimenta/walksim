@@ -22,6 +22,13 @@
 #define JOINT_MAX          6
 
 
+#define DEFAULT_SIZE   10.0
+#define DEFAULT_WIDTH  (0.04 * DEFAULT_SIZE)
+#define DEFAULT_HEIGHT (0.2 * DEFAULT_SIZE)
+#define DEFAULT_LENGTH (0.1 * DEFAULT_SIZE) //(1e-6 * DEFAULT_SIZE)
+#define DEFAULT_MASS   1.0
+
+
 class Ragdoll : public Drawable
 {
 private:
@@ -35,6 +42,8 @@ public:
 	void close();
 
 	void draw();
+
+	int* getJoints();
 };
 
 #endif

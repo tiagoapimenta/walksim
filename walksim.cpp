@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	Simulator   sim;
 	Environment env(GRAVITY);
 	Ragdoll     doll(env);
-	Controller  control(render);
+	Controller  control(render, doll);
 
 	render.addUpdater(control);
 	render.addUpdater(sim);
