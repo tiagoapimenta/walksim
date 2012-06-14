@@ -12,6 +12,7 @@ Environment::Environment(double gravity)
 
 void Environment::close()
 {
+	physics_destroy_object(plane);
 	physics_destroy_world(world);
 }
 

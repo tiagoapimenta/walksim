@@ -10,6 +10,7 @@ int physics_create_world(double gravity);
 void physics_destroy_world(int world);
 
 int physics_create_fixed_plane(int world, double pos_x, double pos_y, double pos_z, double width, double height);
+int physics_create_box(int world, double pos_x, double pos_y, double pos_z, double width, double height, double length, double mass);
 //int physics_create_plane();
 //int physics_create_rigdbody();
 void physics_destroy_object(int object);

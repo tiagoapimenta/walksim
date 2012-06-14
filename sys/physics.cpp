@@ -75,6 +75,7 @@ int physics_create_fixed_plane(int world_id, double pos_x, double pos_y, double 
 {
 	World world = worlds.at(world_id);
 	Object3D object;
+
 	PlaneTriMesh &plane_mesh = *(PlaneTriMesh*)malloc(sizeof(PlaneTriMesh));
 	plane_mesh.indexes[4] = plane_mesh.indexes[0] = 2;
 	plane_mesh.indexes[1] = 1;
@@ -97,6 +98,27 @@ int physics_create_fixed_plane(int world_id, double pos_x, double pos_y, double 
 	dMassSetZero(&object.mass);
 	object.body = NULL;
 	
+	objects.insert(std::make_pair(object_last_id, object));
+	return object_last_id++;
+}
+
+int physics_create_box(int world_id, double pos_x, double pos_y, double pos_z, double width, double height, double length, double mass)
+{
+	World world = worlds.at(world_id);
+	Object3D object;
+
+	object.body = dBodyCreate(world.world);
+	object.geom = dCreateBox(world.space, width, height, length);
+	object.data = NULL;
+
+	dBodySetPosition(object.body, pos_x, pos_y, pos_z);
+
+	dMassSetBox(&object.mass, 1.0, width, height, length);
+	dMassAdjust(&object.mass, mass);
+
+	dBodySetMass(object.body, &object.mass);
+	dGeomSetBody(object.geom, object.body);
+
 	objects.insert(std::make_pair(object_last_id, object));
 	return object_last_id++;
 }
