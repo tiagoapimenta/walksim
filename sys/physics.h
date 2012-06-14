@@ -23,5 +23,8 @@ Transform physics_get_rotation(int object);
 
 int physics_get_triangles(int object, Vertex *vertices, int triangles);
 
+int physics_create_hinge_joint(int world, int object1, int object2, double x, double y, double z, double axisX, double axisY, double axisZ);
+void physics_destroy_joint(int joint);
+
 #endif
 

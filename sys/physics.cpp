@@ -27,11 +27,19 @@ typedef struct
 	dVector3  vertices[4];
 } PlaneTriMesh;
 
+/*typedef struct
+{
+	dJointID joint;
+} Joint;*/
+
 static std::map<int, World> worlds;
 static int world_last_id = 0;
 
 static std::map<int, Object3D> objects;
 static int object_last_id = 0;
+
+static std::map<int, dJointID> joints;
+static int joint_last_id = 0;
 
 static void on_collide(void *data, dGeomID o1, dGeomID o2);
 
@@ -214,6 +222,29 @@ int physics_get_triangles(int object_id, Vertex *vertices, int triangles)
 		}
 	}
 	return count;
+}
+
+
+int physics_create_hinge_joint(int world_id, int object_id1, int object_id2, double x, double y, double z, double axisX, double axisY, double axisZ)
+{
+	World world = worlds.at(world_id);
+	Object3D object1 = objects.at(object_id1);
+	Object3D object2 = objects.at(object_id2);
+
+	dJointID joint = dJointCreateHinge(world.world, world.contact_group);
+	dJointAttach(joint, object1.body, object2.body);
+	dJointSetHingeAnchor(joint, x, y, z);
+	dJointSetHingeAxis(joint, axisX, axisY, axisZ);
+
+	joints.insert(std::make_pair(joint_last_id, joint));
+	return joint_last_id++;
+}
+
+void physics_destroy_joint(int joint_id)
+{
+	dJointID joint = joints.at(joint_id);
+	dJointDestroy(joint);
+	joints.erase(joint_id);
 }
 
 
