@@ -30,27 +30,27 @@
 
 #define LEFT_THIGH_X   0.0
 #define LEFT_THIGH_Y   (TORSO_Y - 0.5 * TORSO_HEIGHT - 0.5 * THIGH_HEIGHT)
-#define LEFT_THIGH_Z   0.0
+#define LEFT_THIGH_Z   DEFAULT_LENGTH
 
 #define RIGHT_THIGH_X  0.0
 #define RIGHT_THIGH_Y  LEFT_THIGH_Y
-#define RIGHT_THIGH_Z  0.0
+#define RIGHT_THIGH_Z  (-DEFAULT_LENGTH)
 
 #define LEFT_SHIN_X    0.0
 #define LEFT_SHIN_Y    (TORSO_Y - 0.5 * TORSO_HEIGHT - THIGH_HEIGHT - 0.5 * SHIN_HEIGHT)
-#define LEFT_SHIN_Z    0.0
+#define LEFT_SHIN_Z    DEFAULT_LENGTH
 
 #define RIGHT_SHIN_X   0.0
 #define RIGHT_SHIN_Y   LEFT_SHIN_Y
-#define RIGHT_SHIN_Z   0.0
+#define RIGHT_SHIN_Z   (-DEFAULT_LENGTH)
 
 #define LEFT_FOOT_X    (FOOT_WIDTH / 2)
 #define LEFT_FOOT_Y    (TORSO_Y - 0.5 * TORSO_HEIGHT - THIGH_HEIGHT - SHIN_HEIGHT)
-#define LEFT_FOOT_Z    0.0
+#define LEFT_FOOT_Z    DEFAULT_LENGTH
 
 #define RIGHT_FOOT_X   LEFT_FOOT_X
 #define RIGHT_FOOT_Y   LEFT_FOOT_Y
-#define RIGHT_FOOT_Z   0.0
+#define RIGHT_FOOT_Z   (-DEFAULT_LENGTH)
 
 
 #define DEFAULT_AXIS_X 0.0
@@ -59,27 +59,27 @@
 
 #define LEFT_HIP_X     0.0
 #define LEFT_HIP_Y     (TORSO_Y - 0.5 * TORSO_HEIGHT)
-#define LEFT_HIP_Z     0.0
+#define LEFT_HIP_Z     DEFAULT_LENGTH
 
 #define RIGHT_HIP_X    0.0
 #define RIGHT_HIP_Y    LEFT_HIP_Y
-#define RIGHT_HIP_Z    0.0
+#define RIGHT_HIP_Z    (-DEFAULT_LENGTH)
 
 #define LEFT_KNEE_X    0.0
 #define LEFT_KNEE_Y    (TORSO_Y - 0.5 * TORSO_HEIGHT - THIGH_HEIGHT)
-#define LEFT_KNEE_Z    0.0
+#define LEFT_KNEE_Z    DEFAULT_LENGTH
 
 #define RIGHT_KNEE_X   0.0
 #define RIGHT_KNEE_Y   LEFT_KNEE_Y
-#define RIGHT_KNEE_Z   0.0
+#define RIGHT_KNEE_Z   (-DEFAULT_LENGTH)
 
 #define LEFT_ANKLE_X   0.0
 #define LEFT_ANKLE_Y   (TORSO_Y - 0.5 * TORSO_HEIGHT - THIGH_HEIGHT - SHIN_HEIGHT)
-#define LEFT_ANKLE_Z   0.0
+#define LEFT_ANKLE_Z   DEFAULT_LENGTH
 
 #define RIGHT_ANKLE_X  0.0
 #define RIGHT_ANKLE_Y  LEFT_ANKLE_Y
-#define RIGHT_ANKLE_Z  0.0
+#define RIGHT_ANKLE_Z  (-DEFAULT_LENGTH)
 
 
 Ragdoll::Ragdoll(Environment &env) : env(env)
@@ -194,7 +194,7 @@ void Ragdoll::close()
 
 void Ragdoll::draw()
 {
-	for (int i = 0; i < OBJECT_MAX; i++)
+	for (int i = OBJECT_MAX; i-- ;)
 	{
 		Vertex lengths = physics_get_lengths(objects[i]);
 		Vertex position = physics_get_position(objects[i]);

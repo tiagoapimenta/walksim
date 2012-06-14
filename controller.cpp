@@ -12,14 +12,14 @@ Controller::Controller(Renderer &render, Ragdoll &doll) : render(render), doll(d
 	joints = doll.getJoints();
 
 	for (int i = 0; i < JOINT_MAX; i++) {
-		ks[i] = 300.0;
-		kd[i] = 30.0;  
-		target[i] = 0;
+		ks[i]     = 500.0;
+		kd[i]     =  50.0;  
+		target[i] =   0.0;
 	}
 
-	target[0] = -1.0 * DEFAULT_SIZE; 
-	target[1] =  0.5 * DEFAULT_SIZE; 
-	target[2] =  1.0 * DEFAULT_SIZE;
+	// target[0] = -1.0;
+	// target[1] =  0.5;
+	// target[2] =  1.0;
 }
 
 void Controller::close()
@@ -31,7 +31,7 @@ void Controller::update(double time)
 {
 	time_count += time;
 
-	int new_state = ((int)(time_count / 1.5)) % 4;
+	int new_state = ((int)(time_count * 0.5)) % 4;
 
 	if (new_state != state)
 	{
@@ -42,23 +42,23 @@ void Controller::update(double time)
 		{
 			int leg1 = state / 2;
 			int leg2 = 1 - leg1;
-			target[leg1]     = -1.0 * DEFAULT_SIZE;
-			target[leg2]     =  0.5 * DEFAULT_SIZE;
-			target[leg1 + 2] =  1.0 * DEFAULT_SIZE;
-			target[leg2 + 2] =  0.0 * DEFAULT_SIZE;
-			target[leg1 + 4] =  0.0 * DEFAULT_SIZE;
-			target[leg2 + 4] =  0.0 * DEFAULT_SIZE;
+			target[leg1]     = -1.0;
+			target[leg2]     =  0.5;
+			target[leg1 + 2] =  1.1;
+			target[leg2 + 2] =  0.1;
+			target[leg1 + 4] = -0.5;
+			target[leg2 + 4] = -0.1;
 		}
 		else
 		{
 			int leg1 = state / 2;
 			int leg2 = 1 - leg1;
-			target[leg1]     = -0.2 * DEFAULT_SIZE;
-			target[leg2]     =  0.0 * DEFAULT_SIZE;
-			target[leg1 + 2] =  0.2 * DEFAULT_SIZE;
-			target[leg2 + 2] =  0.0 * DEFAULT_SIZE;
-			target[leg1 + 4] =  0.1 * DEFAULT_SIZE;
-			target[leg2 + 4] =  0.0 * DEFAULT_SIZE;
+			target[leg1]     =  1.0;
+			target[leg2]     = -1.0;
+			target[leg1 + 2] =  0.5;
+			target[leg2 + 2] =  0.0;
+			target[leg1 + 4] = -0.5;
+			target[leg2 + 4] =  0.0;
 		}
 	}
 
