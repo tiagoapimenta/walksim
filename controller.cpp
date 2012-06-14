@@ -19,7 +19,7 @@ Controller::Controller(Renderer &render, Ragdoll &doll) : render(render), doll(d
 
 	target[0] = -1.0 * DEFAULT_SIZE; 
 	target[1] =  0.5 * DEFAULT_SIZE; 
-	target[2] =  1.0 * DEFAULT_SIZE; 
+	target[2] =  1.0 * DEFAULT_SIZE;
 }
 
 void Controller::close()
@@ -45,9 +45,9 @@ void Controller::update(double time)
 			target[leg1]     = -1.0 * DEFAULT_SIZE;
 			target[leg2]     =  0.5 * DEFAULT_SIZE;
 			target[leg1 + 2] =  1.0 * DEFAULT_SIZE;
-			target[leg2 + 2] = -0.1 * DEFAULT_SIZE;
+			target[leg2 + 2] =  0.0 * DEFAULT_SIZE;
 			target[leg1 + 4] =  0.0 * DEFAULT_SIZE;
-			target[leg2 + 4] = -0.1 * DEFAULT_SIZE;
+			target[leg2 + 4] =  0.0 * DEFAULT_SIZE;
 		}
 		else
 		{
