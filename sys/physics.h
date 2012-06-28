@@ -31,5 +31,7 @@ double physics_get_hinge_angle(int joint);
 double physics_get_hinge_angle_rate(int joint);
 void physics_add_hinge_torque(int joint, double torque);
 
+void physics_set_collider(void(*collider)(int objectA, int objectB));
+
 #endif
 

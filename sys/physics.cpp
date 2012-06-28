@@ -40,6 +40,7 @@ static int object_last_id = 0;
 
 static std::map<int, dJointID> joints;
 static int joint_last_id = 0;
+static void(*collider_func)(int objectA, int objectB) = NULL;
 
 static void on_collide(void *data, dGeomID o1, dGeomID o2);
 
@@ -100,7 +101,7 @@ int physics_create_fixed_plane(int world_id, double pos_x, double pos_y, double 
 	dGeomTriMeshDataBuildSimple(tri_mesh, (dReal*)plane_mesh.vertices, 4, plane_mesh.indexes, 6);
 	object.geom = dCreateTriMesh(world.space, tri_mesh, NULL, NULL, NULL);
 
-	dGeomSetData(object.geom, (void*)"Plane");
+	//dGeomSetData(object.geom, (void*)object_last_id);
 	dGeomSetPosition(object.geom, 0, -10.0, 0);
 
 	dMassSetZero(&object.mass);
@@ -126,6 +127,7 @@ int physics_create_box(int world_id, double pos_x, double pos_y, double pos_z, d
 
 	dBodySetMass(object.body, &object.mass);
 	dGeomSetBody(object.geom, object.body);
+	//dGeomSetData(object.geom, (void*)object_last_id);
 
 	objects.insert(std::make_pair(object_last_id, object));
 	return object_last_id++;
@@ -301,6 +303,34 @@ static void on_collide(void *data, dGeomID o1, dGeomID o2)
 			dJointID c = dJointCreateContact(world.world, world.contact_group, &contact[i]);
 			dJointAttach(c, body1, body2);
 		}
+
+		if (collider_func)
+		{
+			int objectA = -1, //(int)dGeomGetData(o1),
+				objectB = -1; //(int)dGeomGetData(o2);
+			
+			for (std::map<int, Object3D>::iterator it = objects.begin(); it != objects.end(); it++)
+			{
+				if (it->second.geom == o1)
+				{
+					objectA = it->first;
+					if (objectB != -1) break;
+				}
+				if (it->second.geom == o2)
+				{
+					objectB = it->first;
+					if (objectA != -1) break;
+				}
+			}
+
+			collider_func(objectA, objectB);
+		}
 	}
+}
+
+
+void physics_set_collider(void(*collider)(int objectA, int objectB))
+{
+	collider_func = collider;
 }
 

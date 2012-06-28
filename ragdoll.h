@@ -25,23 +25,30 @@
 #define DEFAULT_SIZE   10.0
 #define DEFAULT_WIDTH  (0.04 * DEFAULT_SIZE)
 #define DEFAULT_HEIGHT (0.2 * DEFAULT_SIZE)
-#define DEFAULT_LENGTH (0.1 * DEFAULT_SIZE) //(1e-6 * DEFAULT_SIZE)
-#define DEFAULT_MASS   1.0
+#define DEFAULT_LENGTH (0.05 * DEFAULT_SIZE) //(1e-6 * DEFAULT_SIZE)
+#define DEFAULT_MASS   1.5
 
 
-class Ragdoll : public Drawable
+class Ragdoll : public Drawable, public Updateable, public Collideable
 {
 private:
 	Environment &env;
 	int world;
+	int ground;
 	int objects[OBJECT_MAX];
 	int joints[JOINT_MAX];
+	double ks[JOINT_MAX], kd[JOINT_MAX], target[JOINT_MAX];
+	int state;
+	int new_state;
+	double time_count;
 
 public:
 	Ragdoll(Environment &env);
 	void close();
 
+	void update(double time);
 	void draw();
+	void collide(int objectA, int objectB);
 
 	int* getJoints();
 };

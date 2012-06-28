@@ -2,8 +2,6 @@
 #include "sys/physics.h"
 #include "sys/graphics.h"
 
-#include <iostream>
-
 Environment::Environment(double gravity)
 {
 	world = physics_create_world(-gravity);
@@ -29,5 +27,10 @@ void Environment::draw()
 int Environment::getWorld()
 {
 	return world;
+}
+
+int Environment::getGround()
+{
+	return plane;
 }
 

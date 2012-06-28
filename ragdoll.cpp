@@ -2,6 +2,8 @@
 #include "sys/physics.h"
 #include "sys/graphics.h"
 
+#include <iostream> // TODO: Temp
+
 #define TORSO_WIDTH    DEFAULT_WIDTH
 #define TORSO_HEIGHT   (0.480 * DEFAULT_SIZE)
 #define TORSO_LENGTH   DEFAULT_LENGTH
@@ -25,7 +27,7 @@
 #define JOINT_RADIUS   (0.05 * DEFAULT_SIZE)
 
 #define TORSO_X        0.0
-#define TORSO_Y        (0.5 * TORSO_HEIGHT + THIGH_LENGTH + SHIN_LENGTH + 0.5 * DEFAULT_WIDTH - 4.0)
+#define TORSO_Y        (0.5 * TORSO_HEIGHT + THIGH_HEIGHT + SHIN_HEIGHT + FOOT_HEIGHT - 10.0)
 #define TORSO_Z        0.0
 
 #define LEFT_THIGH_X   0.0
@@ -82,9 +84,13 @@
 #define RIGHT_ANKLE_Z  (-DEFAULT_LENGTH)
 
 
-Ragdoll::Ragdoll(Environment &env) : env(env)
+#define STEP_INTERVAL  0.8
+
+
+Ragdoll::Ragdoll(Environment &env) : env(env), time_count(0.0), ground(-1), state(-1), new_state(0)
 {
 	world = env.getWorld();
+	ground = env.getGround();
 
 	objects[OBJECT_TORSO] = physics_create_box(
 		world,
@@ -177,6 +183,16 @@ Ragdoll::Ragdoll(Environment &env) : env(env)
 		RIGHT_ANKLE_X, RIGHT_ANKLE_Y, RIGHT_ANKLE_Z,
 		DEFAULT_AXIS_X, DEFAULT_AXIS_Y, DEFAULT_AXIS_Z
 	);
+
+	for (int i = 0; i < JOINT_MAX; i++) {
+		ks[i]     = 500.0;
+		kd[i]     =  50.0;  
+		target[i] =   0.0;
+	}
+
+	// target[0] = -1.0;
+	// target[1] =  0.5;
+	// target[2] =  1.0;
 }
 
 void Ragdoll::close()
@@ -215,9 +231,77 @@ void Ragdoll::draw()
 	}
 }
 
+void Ragdoll::update(double time)
+{
+	if (state % 2 == 0)
+	{
+		time_count += time;
+
+		if (time_count > STEP_INTERVAL)
+		{
+			new_state = state + 1;
+			time_count -= STEP_INTERVAL;
+		}
+	}
+
+	if (new_state % 4 != state)
+	{
+		state = new_state % 4;
+		std::cout << "State " << state << std::endl;
+
+		if (state % 3 == 0)
+		{
+			int leg1 = state / 2;
+			int leg2 = 1 - leg1;
+			target[leg1]     = -1.5; // hip
+			target[leg2]     =  0.5; // hip
+			target[leg1 + 2] =  1.0; // knee
+			target[leg2 + 2] =  0.5; // knee
+			target[leg1 + 4] = -0.5; // ankle
+			target[leg2 + 4] = -0.5; // ankle
+		}
+		else
+		{
+			int leg1 = state / 2;
+			int leg2 = 1 - leg1;
+			target[leg1]     =  0.5; // hip
+			target[leg2]     = -1.0; // hip
+			target[leg1 + 2] =  0.7; // knee
+			target[leg2 + 2] = -0.5; // knee
+			target[leg1 + 4] = -0.5; // ankle
+			target[leg2 + 4] = -0.5; // ankle
+		}
+	}
+
+	for (int i = 0; i < JOINT_MAX; i++)
+	{
+		double limit = ks[i];
+
+		double theta = physics_get_hinge_angle(joints[i]);
+		double theta_rate = physics_get_hinge_angle_rate(joints[i]);
+		double torque = ks[i] * (target[i] - theta) - kd[i] * theta_rate;
+
+		if (torque > limit) torque = limit; 
+		if (torque < -limit) torque = -limit; 
+
+		physics_add_hinge_torque(joints[i], torque);
+	}
+}
+
 
 int* Ragdoll::getJoints()
 {
 	return joints;
+}
+
+
+void Ragdoll::collide(int objectA, int objectB)
+{
+	if (objectA != ground && objectB != ground) return;
+
+	int object_foot = (objectA == ground) ? objectB : objectA;
+
+	if (state == 1 && object_foot == objects[OBJECT_LEFT_FOOT]) new_state = state + 1;
+	else if (state == 3 && object_foot == objects[OBJECT_RIGHT_FOOT]) new_state = state + 1;
 }
 

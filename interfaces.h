@@ -27,5 +27,10 @@ public:
 	virtual void typeRelease(int key) = 0;
 };
 
+class Collideable
+{
+public:
+	virtual void collide(int objectA, int objectB) = 0;
+};
 #endif
 

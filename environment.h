@@ -16,6 +16,7 @@ public:
 	void draw();
 
 	int getWorld();
+	int getGround();
 };
 
 #endif
