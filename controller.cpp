@@ -16,8 +16,8 @@ void Controller::close()
 
 void Controller::draw()
 {
-	graphics_rotate(angleX, angleY, 0.0);
 	graphics_translate(posX, posY, posZ);
+	graphics_rotate(angleX, angleY, 0.0);
 }
 
 void Controller::type(int key)

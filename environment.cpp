@@ -5,7 +5,7 @@
 Environment::Environment(double gravity)
 {
 	world = physics_create_world(-gravity);
-	plane = physics_create_fixed_plane(world, 0.0, -10.0, 0.0, 20.0, 20.0);
+	plane = physics_create_fixed_plane(world, 0.0, -10.0, 0.0, 50.0, 50.0);
 }
 
 void Environment::close()

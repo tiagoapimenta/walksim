@@ -274,8 +274,8 @@ void Ragdoll::update(double time)
 			int leg2 = 1 - leg1;
 			target[leg1]     = -0.4; // hip
 			target[leg2]     =  0.3; // hip
-			target[leg1 + 2] =  1.5; // knee
-			target[leg2 + 2] =  0.5; // knee
+			target[leg1 + 2] =  1.4; // knee
+			target[leg2 + 2] =  0.2; // knee
 			target[leg1 + 4] = -0.5; // ankle
 			target[leg2 + 4] = -0.5; // ankle
 		}
