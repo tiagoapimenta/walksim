@@ -292,9 +292,9 @@ static void on_collide(void *data, dGeomID o1, dGeomID o2)
 	dContact contact[MAX_CONTACTS];
  
 	for (int i = 0; i < MAX_CONTACTS; i++) {
-		contact[i].surface.mode = dContactBounce;
-		contact[i].surface.bounce = 0.5;
-		contact[i].surface.mu = 100.0;
+		contact[i].surface.mode = dContactApprox1; //dContactBounce;
+		//contact[i].surface.bounce = 0.5;
+		contact[i].surface.mu = 0.8; //100.0;
 	}
  
 	int collisions = dCollide(o1, o2, MAX_CONTACTS, &contact[0].geom, sizeof(dContact));

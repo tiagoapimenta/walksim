@@ -184,11 +184,19 @@ Ragdoll::Ragdoll(Environment &env) : env(env), time_count(0.0), ground(-1), stat
 		DEFAULT_AXIS_X, DEFAULT_AXIS_Y, DEFAULT_AXIS_Z
 	);
 
-	for (int i = 0; i < JOINT_MAX; i++) {
-		ks[i]     = 500.0;
-		kd[i]     =  50.0;  
-		target[i] =   0.0;
+	for (int i = 0; i < JOINT_LEFT_ANKLE; i++) {
+		ks[i]     = 2000.0;
+		kd[i]     =  200.0;  
+		target[i] =    0.0;
 	}
+
+	ks[JOINT_LEFT_ANKLE]      = 500.0;
+	kd[JOINT_LEFT_ANKLE]      =  50.0;  
+	target[JOINT_LEFT_ANKLE]  =   0.0;
+
+	ks[JOINT_RIGHT_ANKLE]     = 500.0;
+	kd[JOINT_RIGHT_ANKLE]     =  50.0;  
+	target[JOINT_RIGHT_ANKLE] =   0.0;
 
 	// target[0] = -1.0;
 	// target[1] =  0.5;
@@ -253,9 +261,9 @@ void Ragdoll::update(double time)
 		{
 			int leg1 = state / 2;
 			int leg2 = 1 - leg1;
-			target[leg1]     = -1.5; // hip
-			target[leg2]     =  0.5; // hip
-			target[leg1 + 2] =  1.0; // knee
+			target[leg1]     = -0.5; // hip
+			target[leg2]     =  0.2; // hip
+			target[leg1 + 2] =  1.5; // knee
 			target[leg2 + 2] =  0.5; // knee
 			target[leg1 + 4] = -0.5; // ankle
 			target[leg2 + 4] = -0.5; // ankle
@@ -264,10 +272,10 @@ void Ragdoll::update(double time)
 		{
 			int leg1 = state / 2;
 			int leg2 = 1 - leg1;
-			target[leg1]     =  0.5; // hip
-			target[leg2]     = -1.0; // hip
-			target[leg1 + 2] =  0.7; // knee
-			target[leg2 + 2] = -0.5; // knee
+			target[leg1]     = -0.4; // hip
+			target[leg2]     =  0.3; // hip
+			target[leg1 + 2] =  1.5; // knee
+			target[leg2 + 2] =  0.5; // knee
 			target[leg1 + 4] = -0.5; // ankle
 			target[leg2 + 4] = -0.5; // ankle
 		}
